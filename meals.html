@@ -1,0 +1,1003 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meals - EliteFeast</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #FFD700;
+            --secondary-color: #4B0082;
+            --accent-color: #C0C0C0;
+            --dark-bg: #121212;
+            --darker-bg: #1E1E1E;
+            --text-color: #E0E0E0;
+            --glow-color: rgba(255, 215, 0, 0.3);
+            --shadow-color: rgba(0, 0, 0, 0.7);
+            --font-primary: 'Playfair Display', serif;
+            --font-secondary: 'Roboto', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-secondary);
+            background: linear-gradient(135deg, var(--dark-bg), var(--darker-bg));
+            color: var(--text-color);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(18, 18, 18, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 3rem;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            z-index: 1000;
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-family: var(--font-primary);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s, transform 0.3s;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        #meals {
+            padding: 8rem 2rem;
+            text-align: center;
+            background: var(--darker-bg);
+        }
+
+        #meals h2 {
+            font-family: var(--font-primary);
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 4rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            background: var(--secondary-color);
+            color: var(--text-color);
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-family: var(--font-primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .search-bar input {
+            width: 100%;
+            max-width: 600px;
+            padding: 1rem 2rem;
+            border: 1px solid var(--accent-color);
+            border-radius: 50px;
+            font-size: 1.2rem;
+            background: var(--dark-bg);
+            color: var(--text-color);
+            margin-bottom: 3rem;
+            transition: box-shadow 0.3s;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            box-shadow: 0 0 10px var(--glow-color);
+        }
+
+        .meal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .meal-card {
+            background: linear-gradient(135deg, rgba(30, 30, 30, 0.9), rgba(18, 18, 18, 0.9));
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            padding: 2rem;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: cardReveal 1s ease-out forwards;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .meal-card:nth-child(1) { animation-delay: 0.2s; }
+        .meal-card:nth-child(2) { animation-delay: 0.4s; }
+        .meal-card:nth-child(3) { animation-delay: 0.6s; }
+
+        .meal-card:hover {
+            transform: translateY(-20px);
+            box-shadow: 0 20px 50px var(--shadow-color), 0 0 20px var(--glow-color);
+        }
+
+        .meal-visual {
+            width: 100%;
+            height: 250px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .meal-visual::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+            animation: rotateGlow 10s infinite linear;
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .meal-card h3 {
+            font-family: var(--font-primary);
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin: 1.5rem 0 1rem;
+            text-shadow: 0 0 5px var(--glow-color);
+        }
+
+        .meal-card p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .plan-button {
+            background: var(--primary-color);
+            color: var(--dark-bg);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-family: var(--font-primary);
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--glow-color);
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .plan-button:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        @keyframes cardReveal {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        footer {
+            background: linear-gradient(135deg, var(--darker-bg), var(--dark-bg));
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease-out 0.5s forwards;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-family: var(--font-primary);
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            transition: color 0.3s, transform 0.3s;
+            position: relative;
+        }
+
+        footer a:hover {
+            color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        footer a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s;
+        }
+
+        footer a:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 1200px) {
+            .meal-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        }
+
+        @media (max-width: 900px) {
+            #meals h2 { font-size: 2.5rem; }
+            .meal-visual { height: 200px; }
+        }
+
+        @media (max-width: 600px) {
+            nav ul { flex-direction: column; gap: 1.5rem; }
+            .meal-card h3 { font-size: 1.5rem; }
+            .plan-button { padding: 0.8rem 1.5rem; font-size: 1rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; transform: none !important; opacity: 1 !important; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="meals.html">Meals</a></li>
+                <li><a href="nutrition.html">Nutrition</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="meals">
+        <h2>Curated Meal Plans</h2>
+        <div class="filters">
+            <button class="filter-btn">All</button>
+            <button class="filter-btn">Vegan</button>
+            <button class="filter-btn">Keto</button>
+            <button class="filter-btn">Gluten-Free</button>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search meals...">
+        </div>
+        <div class="meal-grid">
+            <div class="meal-card">
+                <div class="meal-visual"></div>
+                <h3>Core Plan</h3>
+                <p>Breakfast and lunch crafted for flavor and health.</p>
+                <button class="plan-button">Choose Core</button>
+            </div>
+            <div class="meal-card">
+                <div class="meal-visual"></div>
+                <h3>Elite Plan</h3>
+                <p>Full-day meals with premium ingredients.</p>
+                <button class="plan-button">Choose Elite</button>
+            </div>
+            <div class="meal-card">
+                <div class="meal-visual"></div>
+                <h3>Signature Plan</h3>
+                <p>Bespoke dining with custom meals and snacks.</p>
+                <button class="plan-button">Choose Signature</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 EliteFeast. All rights reserved.</p>
+        <div class="social-links">
+            <a href="#">Facebook</a>
+            <a href="#">Twitter</a>
+            <a href="#">Instagram</a>
+        </div>
+    </footer>
+</body>
+</html> -->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meals - EliteFeast</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for Theme Consistency */
+        :root {
+            --primary-color: #FFD700; /* Gold */
+            --secondary-color: #C0C0C0; /* Silver */
+            --accent-color: #4B0082; /* Indigo */
+            --background-color: #121212; /* Dark background */
+            --text-color: #E0E0E0; /* Light text */
+            --card-background: #1E1E1E; /* Card background */
+            --modal-background: #2C2C2C; /* Modal background */
+            --button-background: #FFD700; /* Button gold */
+            --button-text: #121212; /* Button text */
+            --shadow-color: rgba(0, 0, 0, 0.5); /* Shadow */
+        }
+
+        /* Reset and General Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header and Navigation Styles */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: var(--background-color);
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px var(--shadow-color);
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Main Section Styles */
+        section#meals {
+            padding: 7rem 2rem 2rem;
+            text-align: center;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            font-size: 3rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Search Input Styles */
+        #search {
+            padding: 1rem;
+            width: 85%;
+            max-width: 700px;
+            border: 2px solid var(--secondary-color);
+            border-radius: 30px;
+            background-color: var(--card-background);
+            color: var(--text-color);
+            font-size: 1.1rem;
+            margin-bottom: 3rem;
+            transition: border-color 0.3s;
+        }
+
+        #search:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        /* Meal Grid Layout */
+        .meal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* Meal Card Styles */
+        .meal-card {
+            background-color: var(--card-background);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 6px 20px var(--shadow-color);
+            text-align: left;
+            transition: transform 0.4s, box-shadow 0.4s;
+        }
+
+        .meal-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 12px 25px var(--shadow-color);
+        }
+
+        .meal-card h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .meal-card p {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Button Group Styles */
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.8rem;
+        }
+
+        .info-button {
+            background-color: var(--button-background);
+            color: var(--button-text);
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .info-button:hover {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+        }
+
+        /* Modal Styles */
+        dialog {
+            background-color: var(--modal-background);
+            color: var(--text-color);
+            border: 3px solid var(--primary-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 600px;
+            width: 90%;
+            margin: auto;
+            box-shadow: 0 0 30px var(--shadow-color);
+        }
+
+        dialog h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+
+        dialog ul {
+            list-style: disc inside;
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+        }
+
+        dialog ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        dialog p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        #close-modal {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        #close-modal:hover {
+            background-color: var(--primary-color);
+            color: var(--button-text);
+        }
+
+        /* Animation for Cards */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .meal-card {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="meals.html">Meals</a></li>
+                <li><a href="nutrition.html">Nutrition</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Meals Section -->
+    <section id="meals">
+        <h2>Our Meals</h2>
+        <input type="text" id="search" placeholder="Search meals...">
+        <div id="meal-container" class="meal-grid"></div>
+    </section>
+
+    <!-- Modal for Displaying Info -->
+    <dialog id="info-modal">
+        <div id="modal-content"></div>
+        <button id="close-modal">Close</button>
+    </dialog>
+
+    <script>
+        // Meals Array with 30 Items
+        const meals = [
+            {
+                name: "Grilled Chicken Salad",
+                description: "Fresh greens with juicy grilled chicken.",
+                price: 12.99,
+                ingredients: ["Chicken Breast", "Lettuce", "Tomatoes", "Cucumber", "Olive Oil"],
+                calories: 350,
+                protein: 30,
+                carbs: 15,
+                fats: 20
+            },
+            {
+                name: "Beef Stir-Fry",
+                description: "Tender beef with mixed vegetables.",
+                price: 14.99,
+                ingredients: ["Beef Strips", "Broccoli", "Bell Peppers", "Soy Sauce", "Garlic"],
+                calories: 450,
+                protein: 35,
+                carbs: 20,
+                fats: 25
+            },
+            {
+                name: "Salmon Quinoa Bowl",
+                description: "Nutritious bowl with salmon and quinoa.",
+                price: 15.99,
+                ingredients: ["Salmon Fillet", "Quinoa", "Spinach", "Avocado", "Lemon"],
+                calories: 420,
+                protein: 32,
+                carbs: 25,
+                fats: 22
+            },
+            {
+                name: "Turkey Wrap",
+                description: "Whole wheat wrap with turkey and veggies.",
+                price: 9.99,
+                ingredients: ["Turkey Breast", "Whole Wheat Tortilla", "Lettuce", "Tomato", "Mayo"],
+                calories: 380,
+                protein: 28,
+                carbs: 35,
+                fats: 15
+            },
+            {
+                name: "Veggie Omelette",
+                description: "Fluffy eggs with fresh vegetables.",
+                price: 7.99,
+                ingredients: ["Eggs", "Bell Peppers", "Spinach", "Onions", "Cheese"],
+                calories: 300,
+                protein: 20,
+                carbs: 10,
+                fats: 18
+            },
+            {
+                name: "Chicken Tacos",
+                description: "Spicy tacos with grilled chicken.",
+                price: 10.99,
+                ingredients: ["Chicken", "Corn Tortilla", "Salsa", "Cilantro", "Lime"],
+                calories: 400,
+                protein: 25,
+                carbs: 30,
+                fats: 20
+            },
+            {
+                name: "Shrimp Pasta",
+                description: "Creamy pasta with succulent shrimp.",
+                price: 13.99,
+                ingredients: ["Shrimp", "Pasta", "Cream", "Garlic", "Parmesan"],
+                calories: 550,
+                protein: 30,
+                carbs: 60,
+                fats: 25
+            },
+            {
+                name: "Lentil Soup",
+                description: "Hearty soup with lentils and spices.",
+                price: 6.99,
+                ingredients: ["Lentils", "Carrots", "Celery", "Onions", "Cumin"],
+                calories: 250,
+                protein: 15,
+                carbs: 40,
+                fats: 5
+            },
+            {
+                name: "Pork Chop Plate",
+                description: "Grilled pork chop with mashed potatoes.",
+                price: 14.99,
+                ingredients: ["Pork Chop", "Potatoes", "Butter", "Green Beans", "Salt"],
+                calories: 600,
+                protein: 35,
+                carbs: 45,
+                fats: 30
+            },
+            {
+                name: "Falafel Bowl",
+                description: "Crispy falafel with tahini sauce.",
+                price: 8.99,
+                ingredients: ["Chickpeas", "Parsley", "Garlic", "Tahini", "Pita"],
+                calories: 350,
+                protein: 12,
+                carbs: 50,
+                fats: 15
+            },
+            {
+                name: "Steak with Asparagus",
+                description: "Juicy steak paired with asparagus.",
+                price: 18.99,
+                ingredients: ["Beef Steak", "Asparagus", "Garlic", "Butter", "Pepper"],
+                calories: 500,
+                protein: 40,
+                carbs: 10,
+                fats: 35
+            },
+            {
+                name: "Tuna Salad",
+                description: "Fresh tuna with mixed greens.",
+                price: 11.99,
+                ingredients: ["Tuna", "Lettuce", "Olives", "Red Onion", "Vinaigrette"],
+                calories: 320,
+                protein: 28,
+                carbs: 12,
+                fats: 18
+            },
+            {
+                name: "BBQ Chicken",
+                description: "Grilled chicken with BBQ sauce.",
+                price: 12.99,
+                ingredients: ["Chicken Thighs", "BBQ Sauce", "Coleslaw", "Pickles", "Bun"],
+                calories: 480,
+                protein: 30,
+                carbs: 40,
+                fats: 20
+            },
+            {
+                name: "Eggplant Parmesan",
+                description: "Baked eggplant with cheese and sauce.",
+                price: 10.99,
+                ingredients: ["Eggplant", "Mozzarella", "Tomato Sauce", "Basil", "Parmesan"],
+                calories: 400,
+                protein: 15,
+                carbs: 35,
+                fats: 22
+            },
+            {
+                name: "Sushi Roll",
+                description: "Fresh sushi with rice and seaweed.",
+                price: 13.99,
+                ingredients: ["Rice", "Nori", "Salmon", "Avocado", "Soy Sauce"],
+                calories: 350,
+                protein: 20,
+                carbs: 50,
+                fats: 10
+            },
+            {
+                name: "Chicken Curry",
+                description: "Spicy curry with tender chicken.",
+                price: 11.99,
+                ingredients: ["Chicken", "Coconut Milk", "Curry Paste", "Rice", "Cilantro"],
+                calories: 450,
+                protein: 25,
+                carbs: 55,
+                fats: 18
+            },
+            {
+                name: "Beef Burger",
+                description: "Juicy burger with all the fixings.",
+                price: 12.99,
+                ingredients: ["Beef Patty", "Bun", "Lettuce", "Tomato", "Cheese"],
+                calories: 600,
+                protein: 35,
+                carbs: 45,
+                fats: 30
+            },
+            {
+                name: "Veggie Pizza",
+                description: "Thin crust pizza with fresh veggies.",
+                price: 10.99,
+                ingredients: ["Dough", "Tomato Sauce", "Mozzarella", "Peppers", "Mushrooms"],
+                calories: 400,
+                protein: 15,
+                carbs: 60,
+                fats: 15
+            },
+            {
+                name: "Lamb Kebabs",
+                description: "Grilled lamb with spices.",
+                price: 15.99,
+                ingredients: ["Lamb", "Onions", "Peppers", "Yogurt Sauce", "Spices"],
+                calories: 470,
+                protein: 38,
+                carbs: 15,
+                fats: 28
+            },
+            {
+                name: "Pancake Stack",
+                description: "Fluffy pancakes with syrup.",
+                price: 7.99,
+                ingredients: ["Flour", "Eggs", "Milk", "Maple Syrup", "Butter"],
+                calories: 500,
+                protein: 10,
+                carbs: 80,
+                fats: 20
+            },
+            {
+                name: "Chickpea Salad",
+                description: "Light salad with chickpeas and feta.",
+                price: 8.99,
+                ingredients: ["Chickpeas", "Feta Cheese", "Cucumber", "Tomato", "Olive Oil"],
+                calories: 300,
+                protein: 12,
+                carbs: 35,
+                fats: 15
+            },
+            {
+                name: "Cod Fillet",
+                description: "Baked cod with lemon and herbs.",
+                price: 14.99,
+                ingredients: ["Cod", "Lemon", "Parsley", "Olive Oil", "Garlic"],
+                calories: 350,
+                protein: 30,
+                carbs: 5,
+                fats: 20
+            },
+            {
+                name: "Mushroom Risotto",
+                description: "Creamy risotto with mushrooms.",
+                price: 11.99,
+                ingredients: ["Arborio Rice", "Mushrooms", "Parmesan", "Butter", "Stock"],
+                calories: 450,
+                protein: 15,
+                carbs: 60,
+                fats: 18
+            },
+            {
+                name: "Bison Steak",
+                description: "Lean bison steak with roasted veggies.",
+                price: 17.99,
+                ingredients: ["Bison", "Carrots", "Zucchini", "Rosemary", "Salt"],
+                calories: 480,
+                protein: 45,
+                carbs: 15,
+                fats: 25
+            },
+            {
+                name: "Kale Smoothie",
+                description: "Healthy smoothie with kale and fruit.",
+                price: 6.99,
+                ingredients: ["Kale", "Banana", "Apple", "Almond Milk", "Protein Powder"],
+                calories: 250,
+                protein: 20,
+                carbs: 35,
+                fats: 5
+            },
+            {
+                name: "Spicy Tofu Bowl",
+                description: "Tofu with spicy sauce and rice.",
+                price: 9.99,
+                ingredients: ["Tofu", "Rice", "Chili Sauce", "Green Onions", "Sesame Seeds"],
+                calories: 380,
+                protein: 18,
+                carbs: 50,
+                fats: 12
+            },
+            {
+                name: "Duck Breast",
+                description: "Crispy duck with berry sauce.",
+                price: 16.99,
+                ingredients: ["Duck Breast", "Raspberries", "Honey", "Thyme", "Salt"],
+                calories: 500,
+                protein: 35,
+                carbs: 20,
+                fats: 30
+            },
+            {
+                name: "Greek Chicken",
+                description: "Grilled chicken with tzatziki.",
+                price: 12.99,
+                ingredients: ["Chicken", "Yogurt", "Cucumber", "Garlic", "Pita"],
+                calories: 400,
+                protein: 30,
+                carbs: 25,
+                fats: 20
+            },
+            {
+                name: "Quinoa Patties",
+                description: "Crispy patties made from quinoa.",
+                price: 8.99,
+                ingredients: ["Quinoa", "Eggs", "Breadcrumbs", "Onion", "Spices"],
+                calories: 350,
+                protein: 15,
+                carbs: 45,
+                fats: 12
+            },
+            {
+                name: "Protein Pancakes",
+                description: "High-protein pancakes for gym buffs.",
+                price: 9.99,
+                ingredients: ["Protein Powder", "Oats", "Eggs", "Banana", "Syrup"],
+                calories: 400,
+                protein: 30,
+                carbs: 50,
+                fats: 10
+            }
+        ];
+
+        // Function to Generate Meal Cards
+        function generateMealCards(mealsToShow) {
+            const mealContainer = document.getElementById('meal-container');
+            mealContainer.innerHTML = ''; // Clear existing cards
+            mealsToShow.forEach(meal => {
+                const card = document.createElement('div');
+                card.className = 'meal-card';
+                card.innerHTML = `
+                    <h3>${meal.name}</h3>
+                    <p>${meal.description}</p>
+                    <div class="button-group">
+                        <button class="info-button" data-meal="${meal.name}" data-type="price">Price</button>
+                        <button class="info-button" data-meal="${meal.name}" data-type="ingredients">Ingredients</button>
+                        <button class="info-button" data-meal="${meal.name}" data-type="health">Calories & Health</button>
+                    </div>
+                `;
+                mealContainer.appendChild(card);
+            });
+        }
+
+        // Show Only First 3 Meals Initially
+        generateMealCards(meals.slice(0, 3));
+
+        // Search Functionality
+        document.getElementById('search').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            if (searchTerm === '') {
+                // If search is cleared, show only first 3
+                generateMealCards(meals.slice(0, 3));
+            } else {
+                // Filter all meals based on search term
+                const filteredMeals = meals.filter(meal =>
+                    meal.name.toLowerCase().includes(searchTerm) ||
+                    meal.description.toLowerCase().includes(searchTerm)
+                );
+                generateMealCards(filteredMeals);
+            }
+        });
+
+        // Modal Functionality
+        const modal = document.getElementById('info-modal');
+        const modalContent = document.getElementById('modal-content');
+        const closeModal = document.getElementById('close-modal');
+
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('info-button')) {
+                const mealName = e.target.getAttribute('data-meal');
+                const type = e.target.getAttribute('data-type');
+                const meal = meals.find(m => m.name === mealName);
+                let content = '';
+
+                if (type === 'price') {
+                    content = `
+                        <h3>Price for ${meal.name}</h3>
+                        <p>$${meal.price.toFixed(2)}</p>
+                    `;
+                } else if (type === 'ingredients') {
+                    content = `
+                        <h3>Ingredients for ${meal.name}</h3>
+                        <ul>
+                            ${meal.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+                        </ul>
+                    `;
+                } else if (type === 'health') {
+                    content = `
+                        <h3>Calories & Health for ${meal.name}</h3>
+                        <p>Calories: ${meal.calories} kcal</p>
+                        <p>Protein: ${meal.protein}g</p>
+                        <p>Carbs: ${meal.carbs}g</p>
+                        <p>Fats: ${meal.fats}g</p>
+                    `;
+                }
+
+                modalContent.innerHTML = content;
+                modal.showModal();
+            }
+        });
+
+        // Close Modal
+        closeModal.addEventListener('click', () => {
+            modal.close();
+        });
+
+        // Ensure Navigation Links Work
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                // Default behavior (redirection) works naturally
+                // No interference from search or modal
+            });
+        });
+    </script>
+</body>
+</html>
